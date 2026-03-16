@@ -31,15 +31,24 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: 🔍 Find project structure
+        run: |
+          echo "Root files:"
+          ls -la
+          echo "AIResumeBuilder folder:"
+          ls -la AIResumeBuilder/ || echo "No AIResumeBuilder folder"
+
       - name: 🔧 Make Gradle Executable
-        run: chmod +x gradlew
+        run: chmod +x AIResumeBuilder/gradlew
 
       - name: 🏗️ Build Debug APK
-        run: ./gradlew assembleDebug
+        run: |
+          cd AIResumeBuilder
+          ./gradlew assembleDebug --stacktrace
 
       - name: 📤 Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: AI-Resume-Builder-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: AIResumeBuilder/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
